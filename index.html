@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Convite ❤️</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    height:100vh;
+    overflow:hidden;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#ffd6ea,#ffc2e3,#ffe0f2);
+}
+
+.card{
+    width:90%;
+    max-width:600px;
+    padding:40px;
+    text-align:center;
+
+    background:rgba(255,255,255,.35);
+    backdrop-filter:blur(15px);
+
+    border-radius:35px;
+    border:1px solid rgba(255,255,255,.4);
+
+    box-shadow:0 15px 50px rgba(255,105,180,.25);
+
+    position:relative;
+    z-index:10;
+}
+
+.hidden{
+    display:none;
+}
+
+.teddy{
+    font-size:70px;
+    animation:bounce 2s infinite;
+}
+
+h1{
+    color:#ff2f92;
+    margin-bottom:15px;
+    font-size:2.8rem;
+}
+
+.subtitle{
+    color:#c04d85;
+    margin-bottom:25px;
+}
+
+button{
+    border:none;
+    cursor:pointer;
+
+    padding:15px 35px;
+    margin:10px;
+
+    border-radius:999px;
+
+    font-size:1.15rem;
+
+    transition:.3s;
+}
+
+#yesBtn,#sendBtn{
+    background:linear-gradient(45deg,#ff4fa2,#ff76c8);
+    color:white;
+    box-shadow:0 10px 25px rgba(255,105,180,.4);
+}
+
+#yesBtn:hover,#sendBtn:hover{
+    transform:scale(1.08);
+}
+
+#noBtn{
+    background:#ffe6f0;
+    color:#ff2f92;
+    position:absolute;
+}
+
+input{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:15px;
+    font-size:1rem;
+    margin-top:20px;
+}
+
+#success{
+    margin-top:20px;
+    color:#ff2f92;
+    font-size:1.2rem;
+    font-weight:bold;
+}
+
+.heart{
+    position:absolute;
+    bottom:-50px;
+    pointer-events:none;
+    animation:floatUp linear forwards;
+}
+
+.sparkle{
+    position:absolute;
+    color:white;
+    animation:twinkle 2s infinite;
+}
+
+.confetti{
+    position:absolute;
+}
+
+@keyframes floatUp{
+    from{
+        transform:translateY(0) rotate(0deg);
+        opacity:1;
+    }
+    to{
+        transform:translateY(-110vh) rotate(720deg);
+        opacity:0;
+    }
+}
+
+@keyframes bounce{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-10px);}
+}
+
+@keyframes twinkle{
+    50%{opacity:.2;}
+}
+
+@keyframes fall{
+    to{
+        transform:translateY(110vh) rotate(900deg);
+        opacity:0;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="screen1" class="card">
+
+    <div class="teddy">🧸❤️</div>
+
+    <h1>Você aceita sair comigo? ❤️</h1>
+
+    <p class="subtitle">
+        Cuidado... o botão "Não" é meio tímido 🥺
+    </p>
+
+    <button id="yesBtn">Claro! ❤️</button>
+    <button id="noBtn">Não 😢</button>
+
+</div>
+
+<div id="screen2" class="card hidden">
+
+    <h1>Que felicidade! 💖</h1>
+
+    <p class="subtitle">
+        Agora me diga quando você está livre ✨
+    </p>
+
+    <input id="dateTime" type="datetime-local">
+
+    <button id="sendBtn">
+        Enviar no WhatsApp 💌
+    </button>
+
+    <div id="success"></div>
+
+</div>
+
+<script>
+
+const PHONE = "5517981592980";
+
+const noBtn = document.getElementById("noBtn");
+
+let attempts = 0;
+
+const noTexts = [
+    "Não 😢",
+    "Tem certeza? 🥺",
+    "Certeza mesmo? 😭",
+    "Vai, por favor ❤️",
+    "Você sabe que quer 😘"
+];
+
+function moveButton(){
+
+    attempts++;
+
+    const maxX =
+        window.innerWidth - 180;
+
+    const maxY =
+        window.innerHeight - 100;
+
+    noBtn.style.left =
+        Math.random()*maxX + "px";
+
+    noBtn.style.top =
+        Math.random()*maxY + "px";
+
+    if(attempts < noTexts.length){
+        noBtn.innerText =
+            noTexts[attempts];
+    }
+
+    noBtn.style.transform =
+        `scale(${Math.max(.55,1-attempts*.08)})`;
+}
+
+noBtn.addEventListener(
+    "mouseenter",
+    moveButton
+);
+
+document
+.getElementById("yesBtn")
+.addEventListener("click",()=>{
+
+    launchConfetti(150);
+
+    document
+    .getElementById("screen1")
+    .classList.add("hidden");
+
+    setTimeout(()=>{
+        document
+        .getElementById("screen2")
+        .classList.remove("hidden");
+    },500);
+
+});
+
+document
+.getElementById("sendBtn")
+.addEventListener("click",()=>{
+
+    const date =
+        document
+        .getElementById("dateTime")
+        .value;
+
+    if(!date){
+        alert(
+            "Escolha uma data primeiro ❤️"
+        );
+        return;
+    }
+
+    launchConfetti(250);
+
+    document
+    .getElementById("success")
+    .innerHTML =
+    "Oba! ❤️ Mal posso esperar para te ver!";
+
+    const message =
+`❤️ Oi!
+
+Eu aceito sair com você 😘
+
+Estou livre em:
+
+${date}`;
+
+    setTimeout(()=>{
+
+        window.open(
+            `https://wa.me/${PHONE}?text=${encodeURIComponent(message)}`,
+            "_blank"
+        );
+
+    },1200);
+
+});
+
+function createHeart(){
+
+    const heart =
+        document.createElement("div");
+
+    heart.className = "heart";
+
+    const hearts =
+    ["❤️","💕","💖","💗","💘"];
+
+    heart.innerHTML =
+        hearts[Math.floor(
+            Math.random()*hearts.length
+        )];
+
+    heart.style.left =
+        Math.random()*100 + "vw";
+
+    heart.style.fontSize =
+        (15+Math.random()*25)+"px";
+
+    heart.style.animationDuration =
+        (5+Math.random()*4)+"s";
+
+    document.body.appendChild(heart);
+
+    setTimeout(()=>{
+        heart.remove();
+    },9000);
+}
+
+setInterval(createHeart,450);
+
+function createSparkles(){
+
+    for(let i=0;i<40;i++){
+
+        const s =
+        document.createElement("div");
+
+        s.className = "sparkle";
+
+        s.innerHTML = "✨";
+
+        s.style.left =
+            Math.random()*100+"vw";
+
+        s.style.top =
+            Math.random()*100+"vh";
+
+        s.style.animationDelay =
+            Math.random()*2+"s";
+
+        document.body.appendChild(s);
+    }
+}
+
+createSparkles();
+
+function launchConfetti(count){
+
+    const colors = [
+        "#ff4fa2",
+        "#ff76c8",
+        "#ffd166",
+        "#ffffff",
+        "#ff8fab"
+    ];
+
+    for(let i=0;i<count;i++){
+
+        const c =
+        document.createElement("div");
+
+        c.className = "confetti";
+
+        c.style.left =
+            Math.random()*100+"vw";
+
+        c.style.top = "-20px";
+
+        c.style.width =
+            (6+Math.random()*8)+"px";
+
+        c.style.height =
+            (6+Math.random()*8)+"px";
+
+        c.style.background =
+            colors[
+                Math.floor(
+                    Math.random()*colors.length
+                )
+            ];
+
+        c.style.animation =
+            `fall ${2+Math.random()*2}s linear forwards`;
+
+        document.body.appendChild(c);
+
+        setTimeout(()=>{
+            c.remove();
+        },4000);
+    }
+}
+
+</script>
+
+</body>
+</html>
